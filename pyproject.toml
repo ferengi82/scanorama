@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pilidar"
+version = "2.0.0a1"
+description = "DIY 3D-LiDAR-Scanner (STL27L + NEMA17) auf Raspberry Pi — reines Aufnahmegerät für verlustfreie Rohdaten / DIY 3D LiDAR scanner (STL27L + NEMA17) on Raspberry Pi — pure recording device for lossless raw data"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "ferengi82" }]
+requires-python = ">=3.11"
+dependencies = [
+    "pyserial>=3.5",
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+# GPIO nur auf dem Raspberry Pi nötig / GPIO only needed on the Raspberry Pi
+pi = ["RPi.GPIO>=0.7"]
+dev = ["pytest>=7"]
+
+[project.scripts]
+pilidar = "pilidar.cli:main"
+
+[project.urls]
+Repository = "https://github.com/ferengi82/LiDar"
+
+[tool.setuptools.packages.find]
+include = ["pilidar*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
