@@ -8,9 +8,9 @@
 - [x] Motor: TMC2209 (Default), STSPIN220 (Fallback), Mock; Bewegungs-Zeitleiste
 - [x] Recorder: Stream- und Schrittmodus, Scan-Ordner + meta.json
 - [x] pytest-Suite ohne Hardware (Mocks)
-- [ ] Gerätetests auf dem Pi (Selftest, Motor, Kurz-Scans, Plausibilität)
-- [ ] Referenz-Scan 180° als Validierungsdatensatz
-- [ ] Doku DE/EN vollständig
+- [x] Gerätetests auf dem Pi (Selftest, Motor, Kurz-Scans, Plausibilität)
+- [x] Referenz-Scan 180° als Validierungsdatensatz (pi:~/scans-v2/2026-07-02_scan_01_003)
+- [x] Doku DE/EN vollständig
 
 ## v1.x — Betriebskomfort
 
