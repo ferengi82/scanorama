@@ -34,8 +34,8 @@ class Stspin220Stepper(StepperBase):
         GPIO.setup(cfg.pin_dir, GPIO.OUT, initial=GPIO.LOW)
         # EN/FAULT ist active-low → LOW = Motor bestromt
         GPIO.setup(cfg.pin_en, GPIO.OUT, initial=GPIO.LOW)
-        log.info(f"STSPIN220 initialisiert (STEP={cfg.pin_step} DIR={cfg.pin_dir} "
-                 f"EN={cfg.pin_en}, 1/16 Microsteps, {steps_per_deg:.2f} Steps/°)")
+        log.info(f"{type(self).__name__}: GPIO bereit (STEP={cfg.pin_step} "
+                 f"DIR={cfg.pin_dir} EN={cfg.pin_en})")
 
     def _set_direction(self, forward: bool) -> None:
         self.GPIO.output(self.cfg.pin_dir,

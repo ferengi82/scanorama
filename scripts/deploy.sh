@@ -23,7 +23,7 @@ rsync -az --delete \
 
 echo "→ venv + editable install auf dem Pi"
 ssh "$HOST" "cd $REMOTE_DIR && \
-    if [ ! -d venv ]; then python3 -m venv venv; fi && \
+    if [ ! -d venv ]; then python3 -m venv --system-site-packages venv; fi && \
     ./venv/bin/pip install -q -e '.[dev]'"
 
 if [[ "${1:-}" == "--test" ]]; then
