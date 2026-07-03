@@ -2,7 +2,7 @@
 
 ## v1 — Saubere Rohdaten vom Pi (AKTUELL)
 
-- [x] Paketstruktur `pilidar/` (lidar / motor / scan / cli)
+- [x] Paketstruktur `scanorama/` (lidar / motor / scan / cli)
 - [x] STL27L-Protokoll + vektorisierte Offline-Dekodierung
 - [x] Verlustfreie Rohstrom-Aufnahme mit Chunk-Zeitstempeln
 - [x] Motor: TMC2209 (Default), STSPIN220 (Fallback), Mock; Bewegungs-Zeitleiste
@@ -15,10 +15,10 @@
 ## v1.x — Betriebskomfort
 
 - [ ] GPIO-Buttons (1–2 Stück) zum Scan-Start ohne SSH
-      (Button-Daemon ruft einfach `pilidar scan` auf; systemd-Unit)
+      (Button-Daemon ruft einfach `scanorama scan` auf; systemd-Unit)
 - [ ] Status-LED oder Buzzer (Scan läuft / fertig / Fehler)
 - [ ] Endschalter + Referenzfahrt (Homing) für reproduzierbaren Azimut-Nullpunkt
-- [ ] `pilidar`-Selbstdiagnose erweitern (TMC2209 DRV_STATUS in meta.json)
+- [ ] `scanorama`-Selbstdiagnose erweitern (TMC2209 DRV_STATUS in meta.json)
 
 ## v2 — Kameras
 

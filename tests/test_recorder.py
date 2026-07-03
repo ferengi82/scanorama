@@ -10,9 +10,9 @@ import json
 import numpy as np
 import pytest
 
-from pilidar.config import Config
-from pilidar.scan import session
-from pilidar.scan.recorder import run_scan
+from scanorama.config import Config
+from scanorama.scan import session
+from scanorama.scan.recorder import run_scan
 
 
 def _base_config(tmp_path) -> Config:

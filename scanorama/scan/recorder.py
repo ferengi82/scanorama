@@ -73,7 +73,7 @@ def _run_scan_inner(cfg: Config, scan_dir: Path, use_mock_lidar: bool) -> Path:
     total_deg = cfg.scan.az_end_deg - cfg.scan.az_start_deg
     mode = cfg.scan.mode
     log.info("=" * 60)
-    log.info(f"pilidar-Scan ({mode}-Modus): Azimut "
+    log.info(f"scanorama-Scan ({mode}-Modus): Azimut "
              f"{cfg.scan.az_start_deg:.1f}° → {cfg.scan.az_end_deg:.1f}°")
 
     meta = session.build_meta(cfg.to_dict(), mode=mode)

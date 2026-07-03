@@ -1,4 +1,4 @@
-"""pilidar — DIY 3D-LiDAR-Scanner auf Raspberry Pi (Version 2).
+"""scanorama — DIY 3D-LiDAR-Scanner auf Raspberry Pi (Version 2).
 
 Der Pi ist ein reines Aufnahmegerät: Er zeichnet den unveränderten
 STL27L-Bytestrom, die Motor-Zeitleiste und Metadaten verlustfrei auf.

@@ -1,6 +1,6 @@
 """Tests gegen eine echte STL27L-Aufzeichnung (3 s, vom Gerät).
 
-Die Fixture wurde mit ``pilidar lidar-test --save`` auf dem PiLiDAR
+Die Fixture wurde mit ``scanorama lidar-test --save`` auf dem Scanner-Pi
 aufgenommen (2026-07-02). Sie stellt sicher, dass Extraktion und
 Dekodierung mit echten Gerätedaten funktionieren — nicht nur mit dem
 synthetischen Mock.
@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from pilidar.lidar import protocol
+from scanorama.lidar import protocol
 
 FIXTURE = Path(__file__).parent / "fixtures" / "stl27l_3s.bin"
 

@@ -3,14 +3,24 @@
 > Diese Datei wird laufend gepflegt, damit die Arbeit jederzeit ohne
 > Kontextverlust fortgesetzt werden kann. Neuester Eintrag oben.
 
+## 2026-07-03 — Umbenennung pilidar → scanorama
+
+- Paket, CLI, Doku, Tests, deploy.sh vollständig umbenannt; alle
+  Referenzen auf fremde Projekte entfernt (inkl. README-Credits)
+- Dev-Maschine: SSH-Alias `scanorama`, Key `~/.ssh/id_scanorama`
+- **Pi war offline** — dort steht noch das alte `~/pilidar`. Beim
+  nächsten Kontakt: `scripts/deploy.sh --test` (legt `~/scanorama` an),
+  danach altes `~/pilidar` löschen. Optional: Pi-Hostname `PiLiDAR`
+  umbenennen (Entscheidung des Users).
+
 ## 2026-07-02 (abends) — v1 auf dem Gerät validiert ✓
 
 **Gerätetests (alle bestanden):**
 - Deploy per `scripts/deploy.sh` (venv braucht `--system-site-packages`
   für RPi.GPIO!), pytest auf dem Pi: alle Tests grün
-- `pilidar selftest`: 1804 Frames/s, Rotor 9.9 Hz, CRC-Quote ~0.03 %
+- `scanorama selftest`: 1804 Frames/s, Rotor 9.9 Hz, CRC-Quote ~0.03 %
 - Echte 3-s-Fixture aufgenommen → `tests/fixtures/stl27l_3s.bin` + Tests
-- `pilidar motor-test`: TMC2209 erkannt (IC 0x21), 1/64 Microsteps,
+- `scanorama motor-test`: TMC2209 erkannt (IC 0x21), 1/64 Microsteps,
   10° vor/zurück exakt
 - 30°-Stream-Scan (2°/s): 339 358 Punkte, Azimut monoton 0→30°,
   100 % Elevations-Bin-Abdeckung
@@ -35,11 +45,11 @@ v3 (PC-Auswertung der Rohdaten).
 
 **Erledigt:**
 - Kickoff-Interview geführt, Entscheidungen in `DECISIONS.md`
-- SSH-Zugang zum Pi eingerichtet (`ssh pilidar`, Key `id_pilidar`);
+- SSH-Zugang zum Pi eingerichtet (`ssh scanorama`, Key `id_scanorama`);
   Pi-Umgebung geprüft: Python 3.11.2, dialout/gpio-Gruppen ok,
   `/dev/ttyUSB0` vorhanden, UART aktiv, 92 GB frei
 - Repo `ferengi82/LiDar` nach `/storage/projekte/LiDar2` geklont
-- Paket `pilidar` implementiert:
+- Paket `scanorama` implementiert:
   - `lidar/protocol.py` — STL27L-Frames, CRC8, vektorisierte Extraktion/Dekodierung
   - `lidar/reader.py` — verlustfreie Rohstrom-Aufnahme (lidar_raw.bin + Chunk-Index)
   - `lidar/mock.py` — synthetischer STL27L für Tests
@@ -54,8 +64,8 @@ v3 (PC-Auswertung der Rohdaten).
 **Nächste Schritte:**
 1. Tests lokal grün bekommen, Grundgerüst committen/pushen
 2. Deploy auf den Pi (`scripts/deploy.sh`), venv anlegen
-3. `pilidar selftest` + `pilidar lidar-test --save` (echte Frame-Fixture holen)
-4. `pilidar motor-test` (kleine Drehung, Richtung prüfen)
+3. `scanorama selftest` + `scanorama lidar-test --save` (echte Frame-Fixture holen)
+4. `scanorama motor-test` (kleine Drehung, Richtung prüfen)
 5. Kurz-Scan 30° Stream + Schrittmodus-Test, Rohdaten zurückholen, Plausibilität
 6. Referenz-Scan 180°, Doku fertigstellen
 

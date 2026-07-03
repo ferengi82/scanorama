@@ -127,7 +127,7 @@ def build_meta(config_dict: dict, mode: str) -> dict:
     return {
         "schema_version": 1,
         "software": {
-            "name": "pilidar",
+            "name": "scanorama",
             "version": __version__,
             "git_commit": _git_commit(),
         },

@@ -16,7 +16,7 @@ diesem Projekt fortgesetzt wird.
 | Scan-Modi | Stream (kontinuierlich, Default) **und** Schrittmodus |
 | Repo | Entwicklung in `/storage/projekte/LiDar2`, Push auf `ferengi82/LiDar` main. Altes Projekt bleibt lokal unter `/storage/projekte/LiDar`. |
 | Doku | `README.md` (EN) + `README.de.md` (DE), docs ebenso zweisprachig. Code-Kommentare und Logs auf Deutsch. |
-| Lizenz | MIT. Aus [PiLiDAR 2.0](https://github.com/ORPA1988/PiLiDAR) (CC BY-NC-SA) werden nur **Konzepte** übernommen, kein Code. |
+| Lizenz | MIT. Es wurde kein fremder Code übernommen (eigener Code + portierter v1-Code). |
 | Tests auf dem Pi | Claude darf **selbständig** testen, inklusive Motor-Drehung. |
 
 ## Architekturentscheidungen
@@ -26,7 +26,7 @@ diesem Projekt fortgesetzt wird.
 **Entscheidung:** Die Aufnahme schreibt den unveränderten seriellen
 Bytestrom (`lidar_raw.bin`) plus einen Chunk-Index mit Host-Zeitstempeln
 (`lidar_index.npz`). Frame-Extraktion, CRC-Prüfung und Dekodierung passieren
-**offline** (`pilidar/scan/decode.py`).
+**offline** (`scanorama/scan/decode.py`).
 
 **Warum:** Die Capture-Schleife macht dadurch nichts außer `read()` +
 `write()` — kein Parsing, kein Datenverlust-Risiko, maximal ehrliche
@@ -59,19 +59,27 @@ trennt Steh- und Fahrphasen über die move_start/move_end-Ereignisse.
 ### A5: Bewährten Code portieren statt neu erfinden
 
 - `tmc2209_uart.py` (funktionierender UART-Treiber) → unverändert übernommen
-- CRC-Tabelle + Frame-Format aus v1 → `pilidar/lidar/protocol.py` (vektorisiert)
-- Stream-Stepper-Logik (STEP/DIR-Pulse per Thread) → `pilidar/motor/base.py`
-- Ordner-Namensschema `yyyy-mm-dd_scan_XX_NNN` → `pilidar/scan/session.py`
+- CRC-Tabelle + Frame-Format aus v1 → `scanorama/lidar/protocol.py` (vektorisiert)
+- Stream-Stepper-Logik (STEP/DIR-Pulse per Thread) → `scanorama/motor/base.py`
+- Ordner-Namensschema `yyyy-mm-dd_scan_XX_NNN` → `scanorama/scan/session.py`
 
 ### A6: Kein Homing in v1
 
 Azimut ist relativ zur Startposition beim Programmstart (wie v1).
 Endschalter/Referenzfahrt steht auf der Roadmap.
 
+### A7: Name "scanorama" (2026-07-03)
+
+Das Paket hieß zunächst "pilidar" — das klang wie das fremde
+PiLiDAR-Projekt. Der User wünscht keinerlei Referenzen auf andere
+Projekte (auch keine Credits im README). Neuer Name: **scanorama**
+(Scan + Panorama), Paket + CLI. SSH-Alias und Key der Dev-Maschine
+wurden auf `scanorama`/`id_scanorama` umbenannt.
+
 ## Hardware-Zugang (für Entwicklung)
 
-- Pi: `ssh pilidar` (Host-Eintrag in `~/.ssh/config` der Dev-Maschine,
-  Key `~/.ssh/id_pilidar`, IP 10.0.234.34, User `pi`)
+- Pi: `ssh scanorama` (Host-Eintrag in `~/.ssh/config` der Dev-Maschine,
+  Key `~/.ssh/id_scanorama`, IP 10.0.234.34, User `pi`)
 - Passwörter werden **nicht** in Dateien gespeichert.
 - LiDAR: `/dev/ttyUSB0` @ 921600 · TMC2209-UART: `/dev/ttyAMA0`
-- Deployment: `scripts/deploy.sh` (rsync nach `~/pilidar` + editable install)
+- Deployment: `scripts/deploy.sh` (rsync nach `~/scanorama` + editable install)

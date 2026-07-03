@@ -1,7 +1,7 @@
 """Offline-Dekodierung: Rohdaten-Ordner → points.npz.
 
 Läuft nach der Aufnahme auf dem Pi (Komfortformat) und kann jederzeit
-am PC wiederholt werden (``pilidar decode <ordner>``) — die Rohdaten
+am PC wiederholt werden (``scanorama decode <ordner>``) — die Rohdaten
 bleiben die Master-Quelle.
 
 Ablauf:

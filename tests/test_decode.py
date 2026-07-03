@@ -3,8 +3,8 @@
 import numpy as np
 import pytest
 
-from pilidar.lidar import protocol
-from pilidar.scan import decode, session
+from scanorama.lidar import protocol
+from scanorama.scan import decode, session
 
 
 def _make_scan_dir(tmp_path, n_frames=100, corrupt_idx=()):

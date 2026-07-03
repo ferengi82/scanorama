@@ -26,11 +26,11 @@ Afterwards `/dev/ttyAMA0` exists (TMC2209 configuration). The LiDAR
 itself uses the USB adapter board (`/dev/ttyUSB0`, the CP2102 driver is
 part of the kernel — just plug it in).
 
-## 3. Install pilidar
+## 3. Install scanorama
 
 ```bash
-git clone https://github.com/ferengi82/LiDar.git pilidar
-cd pilidar
+git clone https://github.com/ferengi82/LiDar.git scanorama
+cd scanorama
 # --system-site-packages: RPi.GPIO comes from the OS package
 python3 -m venv --system-site-packages venv
 ./venv/bin/pip install -e .
@@ -39,9 +39,9 @@ python3 -m venv --system-site-packages venv
 ## 4. Function test
 
 ```bash
-./venv/bin/pilidar selftest                      # LiDAR delivering data?
-./venv/bin/pilidar motor-test --degrees 5 --back # motor turns + direction ok?
-./venv/bin/pilidar scan --az-end 10 --speed 5    # mini scan (~2 s)
+./venv/bin/scanorama selftest                      # LiDAR delivering data?
+./venv/bin/scanorama motor-test --degrees 5 --back # motor turns + direction ok?
+./venv/bin/scanorama scan --az-end 10 --speed 5    # mini scan (~2 s)
 ```
 
 Expected selftest result: ~3600 frames in 2 s, rotor ⌀ ~10 Hz,
@@ -52,13 +52,13 @@ CRC errors near 0.
 On the development machine (`~/.ssh/config`):
 
 ```
-Host pilidar
+Host scanorama
     HostName <IP-of-the-Pi>
     User pi
-    IdentityFile ~/.ssh/id_pilidar
+    IdentityFile ~/.ssh/id_scanorama
 ```
 
-Then `scripts/deploy.sh` rsyncs the working tree to `~/pilidar` on the
+Then `scripts/deploy.sh` rsyncs the working tree to `~/scanorama` on the
 Pi (`--test` additionally runs pytest there).
 
 ## Troubleshooting

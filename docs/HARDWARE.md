@@ -6,7 +6,7 @@
 
 | Component | Description |
 |---|---|
-| Raspberry Pi 4B | control + recording (hostname `PiLiDAR`) |
+| Raspberry Pi 4B | control + recording |
 | STL27L | 360° DTOF LiDAR (LDRobot/Waveshare), 25 m, 21,600 points/s, ~10 Hz rotor |
 | Adapter board | Waveshare (ESP8266 + CP2102) → `/dev/ttyUSB0` @ 921600 baud, powers the LiDAR with 5 V |
 | TMC2209 (default) | stepper driver, STEP/DIR via GPIO + configuration via UART, VM 8–24 V |
@@ -35,7 +35,7 @@ enough for a full sphere.
 **Enable the Pi UART:** `raspi-config` → Interface Options → Serial →
 login shell **off**, hardware UART **on** (`/dev/ttyAMA0`).
 
-UART configuration (done automatically by `pilidar` at startup):
+UART configuration (done automatically by `scanorama` at startup):
 microstepping (default 1/64), StealthChop, current scaling (IRUN=31 =
 full potentiometer current → fine-tune via the VREF pot on the board).
 
@@ -81,7 +81,7 @@ Rotation direction is **not inverted** in the current build
 | CRC8 | 1 | lookup table over bytes 0–45 |
 
 Angles of the 12 points: linear interpolation start→end (wraparound at
-360°). Implementation: `pilidar/lidar/protocol.py`.
+360°). Implementation: `scanorama/lidar/protocol.py`.
 
 ## STL27L connector (ZH1.5T-4P)
 

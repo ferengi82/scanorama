@@ -8,12 +8,12 @@ Subcommands:
     decode      Rohdaten-Ordner (erneut) zu points.npz dekodieren
 
 Beispiele:
-    pilidar scan                          # 0–180° Stream @ 1°/s
-    pilidar scan --speed 5                # schneller, weniger dicht
-    pilidar scan --mode step --az-step 1 --rounds 10
-    pilidar scan --driver stspin220       # Fallback-Treiber
-    pilidar motor-test --degrees 10
-    pilidar decode ~/scans/2026-07-02_scan_01_001
+    scanorama scan                          # 0–180° Stream @ 1°/s
+    scanorama scan --speed 5                # schneller, weniger dicht
+    scanorama scan --mode step --az-step 1 --rounds 10
+    scanorama scan --driver stspin220       # Fallback-Treiber
+    scanorama motor-test --degrees 10
+    scanorama decode ~/scans/2026-07-02_scan_01_001
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ from pathlib import Path
 from . import __version__
 from .config import Config
 
-log = logging.getLogger("pilidar")
+log = logging.getLogger("scanorama")
 
 
 def _setup_logging() -> None:
@@ -196,13 +196,13 @@ def cmd_decode(args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     cfg = Config()
     parser = argparse.ArgumentParser(
-        prog="pilidar",
+        prog="scanorama",
         description="3D-LiDAR-Scanner (STL27L + Stepper) — reines Aufnahmegerät: "
                     "zeichnet verlustfreie Rohdaten auf, Auswertung erfolgt am PC.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("--version", action="version",
-                        version=f"pilidar {__version__}")
+                        version=f"scanorama {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
 
     # --- scan ---

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Deploy auf den Raspberry Pi: Code per rsync nach ~/pilidar, venv +
-# editable install. Voraussetzung: SSH-Host "pilidar" in ~/.ssh/config.
+# Deploy auf den Raspberry Pi: Code per rsync nach ~/scanorama, venv +
+# editable install. Voraussetzung: SSH-Host "scanorama" in ~/.ssh/config.
 #
 # Nutzung:
 #   scripts/deploy.sh            # sync + install
@@ -8,8 +8,8 @@
 
 set -euo pipefail
 
-HOST="${PILIDAR_HOST:-pilidar}"
-REMOTE_DIR="~/pilidar"
+HOST="${SCANORAMA_HOST:-scanorama}"
+REMOTE_DIR="~/scanorama"
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "→ Sync $REPO_ROOT → $HOST:$REMOTE_DIR"
@@ -31,4 +31,4 @@ if [[ "${1:-}" == "--test" ]]; then
     ssh "$HOST" "cd $REMOTE_DIR && ./venv/bin/python -m pytest -q"
 fi
 
-echo "✓ Deploy fertig — auf dem Pi: $REMOTE_DIR/venv/bin/pilidar"
+echo "✓ Deploy fertig — auf dem Pi: $REMOTE_DIR/venv/bin/scanorama"

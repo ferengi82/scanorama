@@ -18,7 +18,7 @@ starts after a >5 min pause, a new day resets everything).
 
 **Core principle:** `lidar_raw.bin` + `lidar_index.npz` +
 `motor_timeline.csv` are the lossless master data. `points.npz` can be
-reproduced from them at any time (`pilidar decode <folder>`) and may be
+reproduced from them at any time (`scanorama decode <folder>`) and may be
 deleted/regenerated.
 
 ## lidar_raw.bin

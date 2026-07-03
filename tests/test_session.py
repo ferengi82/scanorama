@@ -4,7 +4,7 @@ import os
 import time
 from datetime import date
 
-from pilidar.scan import session
+from scanorama.scan import session
 
 
 def _today():

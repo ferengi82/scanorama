@@ -9,7 +9,7 @@ zuordnen — mehr braucht die Azimut-Interpolation nicht (bei 1°/s
 Drehgeschwindigkeit entspricht 1 ms gerade 0.001° Azimut).
 
 Frame-Extraktion, CRC-Prüfung und Dekodierung passieren offline in
-``pilidar.scan.decode`` (auf dem Pi nach dem Scan und/oder am PC).
+``scanorama.scan.decode`` (auf dem Pi nach dem Scan und/oder am PC).
 """
 
 from __future__ import annotations
@@ -154,7 +154,7 @@ class LidarRecorder:
 def quick_check(source: ByteSource, seconds: float = 2.0) -> dict:
     """Kurzer Live-Test: liest ``seconds`` lang und dekodiert im Speicher.
 
-    Für Selftest und ``pilidar lidar-test`` — prüft, ob plausible Daten
+    Für Selftest und ``scanorama lidar-test`` — prüft, ob plausible Daten
     ankommen, ohne etwas auf Platte zu schreiben.
 
     Returns:

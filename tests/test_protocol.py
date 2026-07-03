@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from pilidar.lidar import protocol
+from scanorama.lidar import protocol
 
 
 def _sample_frame(start=10.0, end=12.0, ts=123):
