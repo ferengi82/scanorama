@@ -13,6 +13,7 @@ starts after a >5 min pause, a new day resets everything).
 ├── motor_timeline.csv  turntable motion events
 ├── points.npz          decoded point table (convenience format)
 ├── meta.json           parameters, device, time anchor, statistics
+├── photos/             photo round: JPEGs from the 3 USB cameras
 └── scan.log            log output of the scan
 ```
 
@@ -107,3 +108,28 @@ y = h · cos(azimuth)
 
 - 180° of azimuth suffices for a full sphere: each vertical 360° scan
   covers both sides per position.
+
+## photos/ + camera blocks in meta.json
+
+After the LiDAR scan the turntable sweeps 360° in `photo_step_deg`
+steps (default 10° = 36 positions), triggering all cameras at each
+stop: `photos/photo_{NN}_az{AAA}_{cam_id}.jpg`. Exposure/white balance
+are measured on the first camera and locked for all
+(`cameras.locked_params`).
+
+meta.json additionally contains:
+
+- **`cameras.mounts`** — each camera's mounting pose relative to the
+  rotation axis (calibrated values): `r_cam_m`, `z_cam_m`,
+  `az_offset_deg`, `yaw/pitch/roll_mount_deg`, `device`
+- **`cameras.pose_recipe`** — formula for computing each photo's global
+  camera pose from photo azimuth + mount: position
+  x=r·sin(az+az_off), y=r·cos(az+az_off), z=z_cam; orientation
+  yaw=az+az_off+yaw_mount, pitch=pitch_mount, roll=roll_mount
+- **`photos[]`** — per photo: `file`, `cam_id`, `index`,
+  `azimuth_deg` (platform azimuth, same reference as the LiDAR
+  azimuths!) and `t_ns`
+- `cameras.status` — `ok` / `failed` (cameras unavailable; the LiDAR
+  scan remains valid) / `disabled` (`--no-photos`)
+
+Mount overrides on the Pi: `~/.config/scanorama/cameras.json`.

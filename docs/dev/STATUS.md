@@ -1,5 +1,17 @@
 # Arbeitsstand
 
+## 2026-07-03 — v2: Kamera-Integration (Fotorunde + Mounts in meta.json)
+
+- Neues Paket `scanorama/camera/` (Controller-Port aus v1, Mounts mit
+  kalibrierten Defaults + `~/.config/scanorama/cameras.json`, Mock)
+- Fotorunde im Recorder: Default an, 10° = 36 Positionen (User-Anforderung
+  ≥80 % Überlappung bei ~66° HFOV), Kamera-Ausfall bricht Scan nicht ab
+- meta.json: `cameras`-Block (mounts, locked_params, pose_recipe) +
+  `photos[]` (file, cam_id, azimuth_deg, t_ns)
+- CLI: `--no-photos/--photo-step/--photo-settle/--usb-cam`, neu `camera-test`
+- Studio: Transfer lädt jetzt rekursiv (photos/-Unterordner)
+- Tests: Mock-Fotorunde, Mounts, Ausfall — Gerätetest steht aus
+
 > Diese Datei wird laufend gepflegt, damit die Arbeit jederzeit ohne
 > Kontextverlust fortgesetzt werden kann. Neuester Eintrag oben.
 

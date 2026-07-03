@@ -13,6 +13,7 @@ nach >5 min Pause, neuer Tag setzt alles zurück).
 ├── motor_timeline.csv  Bewegungs-Ereignisse des Drehtellers
 ├── points.npz          dekodierte Punkttabelle (Komfortformat)
 ├── meta.json           Parameter, Gerät, Zeitanker, Statistik
+├── photos/             Fotorunde: JPEGs der 3 USB-Kameras
 └── scan.log            Logausgabe des Scans
 ```
 
@@ -108,3 +109,28 @@ y = h · cos(azimuth)
 
 - 180° Azimut genügen für eine Vollkugel: der vertikale 360°-Scan
   deckt pro Stellung beide Seiten ab.
+
+## photos/ + Kamera-Blöcke in meta.json
+
+Nach dem LiDAR-Scan fährt der Teller 360° in `photo_step_deg`-Schritten
+ab (Default 10° = 36 Positionen) und löst an jedem Stopp alle Kameras
+aus: `photos/photo_{NN}_az{AAA}_{cam_id}.jpg`. Belichtung/Weißabgleich
+werden vor der Runde auf der ersten Kamera gemessen und für alle
+gelockt (`cameras.locked_params`).
+
+meta.json enthält dazu:
+
+- **`cameras.mounts`** — Einbaulage jeder Kamera relativ zur Drehachse
+  (kalibrierte Werte): `r_cam_m`, `z_cam_m`, `az_offset_deg`,
+  `yaw/pitch/roll_mount_deg`, `device`
+- **`cameras.pose_recipe`** — Formel, mit der die PC-Auswertung aus
+  Foto-Azimut + Mount die globale Kamerapose berechnet:
+  Position x=r·sin(az+az_off), y=r·cos(az+az_off), z=z_cam;
+  Orientierung yaw=az+az_off+yaw_mount, pitch=pitch_mount, roll=roll_mount
+- **`photos[]`** — pro Foto: `file`, `cam_id`, `index`,
+  `azimuth_deg` (Plattform-Azimut, gleiche Referenz wie die
+  LiDAR-Azimute!) und `t_ns`
+- `cameras.status` — `ok` / `failed` (Kameras nicht verfügbar; der
+  LiDAR-Scan bleibt gültig) / `disabled` (`--no-photos`)
+
+Mount-Overrides auf dem Pi: `~/.config/scanorama/cameras.json`.

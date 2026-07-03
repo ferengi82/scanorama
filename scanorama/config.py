@@ -43,6 +43,24 @@ class MotorConfig:
         return (self.steps_per_rev * self.microsteps * self.gear_ratio) / 360.0
 
 
+def _default_usb_cams() -> list[str]:
+    from .camera.controller import DEFAULT_USB_CAMS
+    return list(DEFAULT_USB_CAMS)
+
+
+@dataclass
+class CameraConfig:
+    """Fotorunde mit den 3× IMX179-USB-Cams (läuft nach dem LiDAR-Scan)."""
+    enabled: bool = True             # Default an; CLI --no-photos schaltet ab
+    devices: list[str] = field(default_factory=_default_usb_cams)
+    width: int = 3264                # IMX179-Maximum (MJPG)
+    height: int = 2448
+    photo_step_deg: float = 10.0     # 36 Positionen → ≥80 % Überlappung
+    settle_s: float = 0.3            # Ausschwingzeit nach jedem Stopp
+    exposure_lock: bool = True       # AE/AWB der ersten Cam für alle locken
+    move_speed_deg_s: float = 20.0   # Verfahrgeschwindigkeit zwischen Stopps
+
+
 @dataclass
 class ScanConfig:
     """Parameter eines Scan-Durchlaufs."""
@@ -65,6 +83,7 @@ class Config:
     lidar: LidarConfig = field(default_factory=LidarConfig)
     motor: MotorConfig = field(default_factory=MotorConfig)
     scan: ScanConfig = field(default_factory=ScanConfig)
+    camera: CameraConfig = field(default_factory=CameraConfig)
     output_dir: str = str(Path.home() / "scans")
 
     def to_dict(self) -> dict:

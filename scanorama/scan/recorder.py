@@ -28,7 +28,7 @@ from ..config import Config
 from ..lidar import mock as lidar_mock
 from ..lidar import reader as lidar_reader
 from ..motor import create_stepper
-from . import decode, session
+from . import decode, photos, session
 
 log = logging.getLogger(__name__)
 
@@ -59,17 +59,26 @@ def _selftest(source: lidar_reader.ByteSource) -> dict:
     return check
 
 
-def run_scan(cfg: Config, use_mock_lidar: bool = False) -> Path:
-    """Führt einen kompletten Scan aus. Rückgabe: Pfad des Scan-Ordners."""
+def run_scan(cfg: Config, use_mock_lidar: bool = False,
+             cameras: list | None = None) -> Path:
+    """Führt einen kompletten Scan aus. Rückgabe: Pfad des Scan-Ordners.
+
+    Args:
+        cfg: Gesamtkonfiguration
+        use_mock_lidar: Mock-LiDAR statt Hardware (Tests)
+        cameras: vorgeöffnete Kamera-Objekte für die Fotorunde
+            (Tests/Mocks); None = echte Kameras laut Konfiguration
+    """
     scan_dir = session.create_scan_dir(cfg.output_dir)
     log_handler = session.attach_file_logger(scan_dir)
     try:
-        return _run_scan_inner(cfg, scan_dir, use_mock_lidar)
+        return _run_scan_inner(cfg, scan_dir, use_mock_lidar, cameras)
     finally:
         session.detach_file_logger(log_handler)
 
 
-def _run_scan_inner(cfg: Config, scan_dir: Path, use_mock_lidar: bool) -> Path:
+def _run_scan_inner(cfg: Config, scan_dir: Path, use_mock_lidar: bool,
+                    cameras: list | None = None) -> Path:
     total_deg = cfg.scan.az_end_deg - cfg.scan.az_start_deg
     mode = cfg.scan.mode
     log.info("=" * 60)
@@ -116,6 +125,13 @@ def _run_scan_inner(cfg: Config, scan_dir: Path, use_mock_lidar: bool) -> Path:
             raise ValueError(f"Unbekannter Scan-Modus: {mode!r}")
 
         capture = recorder.stop()
+
+        # --- Fotorunde (LiDAR-Daten sind ab hier sicher auf der Platte) ---
+        meta["cameras"], meta["photos"] = photos.run_photo_round(
+            cfg, stepper, scan_dir, cameras=cameras)
+
+        # Zeitleiste erst danach speichern — sie enthält so auch die
+        # Positionierfahrten der Fotorunde.
         stepper.timeline.save_csv(scan_dir / session.TIMELINE_NAME)
 
         meta["capture"] = {

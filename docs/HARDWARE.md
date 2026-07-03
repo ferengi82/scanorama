@@ -99,3 +99,20 @@ Angles of the 12 points: linear interpolation start→end (wraparound at
 3. **STSPIN220 max 10 V** motor voltage.
 4. User `pi` must be in the `dialout` group (`/dev/ttyUSB0`, `/dev/ttyAMA0`).
 5. Direction not inverted; mirrored scan → `--invert-dir`.
+
+## Cameras (photo round)
+
+3× Sonix GXI-IMX179 USB modules (8 MP, MJPG 3264×2448) on a Ø 100 mm
+sphere whose centre sits 50 mm below the LiDAR scan plane:
+
+| cam_id | position | pitch | by-path port |
+|---|---|---|---|
+| usb0 | top    | +50° | …usb-0:1.1… |
+| usb1 | middle | +15° | …usb-0:1.3… |
+| usb2 | bottom | −20° | …usb-0:1.4… |
+
+Address them via `/dev/v4l/by-path/…` only (all modules report the same
+serial SN0001). Re-plugged a cable → verify the mapping with `scanorama
+camera-test`. Requires `python3-opencv` and `v4l-utils` on the Pi.
+Calibrated mounts: `scanorama/camera/mounts.py`, overrides in
+`~/.config/scanorama/cameras.json`.

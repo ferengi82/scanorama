@@ -89,6 +89,11 @@ def cmd_scan(args: argparse.Namespace) -> int:
     cfg.scan.rounds_per_position = args.rounds
     cfg.scan.decode_after_scan = not args.no_decode
     cfg.output_dir = args.output_dir
+    cfg.camera.enabled = not args.no_photos
+    cfg.camera.photo_step_deg = args.photo_step
+    cfg.camera.settle_s = args.photo_settle
+    if args.usb_cam:
+        cfg.camera.devices = list(args.usb_cam)
 
     try:
         scan_dir = run_scan(cfg, use_mock_lidar=args.mock_lidar)
@@ -99,6 +104,36 @@ def cmd_scan(args: argparse.Namespace) -> int:
         log.exception(f"Scan fehlgeschlagen: {e}")
         return 1
     print(scan_dir)
+    return 0
+
+
+def cmd_camera_test(args: argparse.Namespace) -> int:
+    """Alle USB-Kameras öffnen, je ein Testbild, Werte ausgeben."""
+    from pathlib import Path
+
+    from .camera.controller import DEFAULT_USB_CAMS, open_all, close_all, \
+        lock_all_to_first
+    from .camera.mounts import load_mounts
+
+    devices = args.usb_cam or list(DEFAULT_USB_CAMS)
+    out = Path(args.out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    mounts = load_mounts()
+
+    cams = open_all(devices)
+    try:
+        lock_all_to_first(cams)
+        for cam in cams:
+            target = out / f"test_{cam.cam_id}.jpg"
+            cam.capture_jpeg(str(target))
+            m = mounts.get(cam.cam_id)
+            info = (f"pitch {m.pitch_mount_deg:+.0f}° az_off "
+                    f"{m.az_offset_deg:.0f}°" if m else "kein Mount-Profil!")
+            log.info(f"{cam.cam_id}: {target} — Mount: {info}")
+    finally:
+        close_all(cams)
+    log.info(f"Testbilder in {out}/ — Mapping prüfen: usb0=oben (+50°), "
+             f"usb1=mitte (+15°), usb2=unten (−20°)")
     return 0
 
 
@@ -224,6 +259,19 @@ def build_parser() -> argparse.ArgumentParser:
                    help="Schrittweite im Schrittmodus in Grad")
     g.add_argument("--rounds", type=int, default=cfg.scan.rounds_per_position,
                    help="LiDAR-Umdrehungen pro Position im Schrittmodus")
+    f = p.add_argument_group("Fotorunde (läuft nach dem LiDAR-Scan)")
+    f.add_argument("--no-photos", action="store_true",
+                   help="Fotorunde überspringen (Default: an)")
+    f.add_argument("--photo-step", type=float,
+                   default=cfg.camera.photo_step_deg,
+                   help="Winkel zwischen Fotopositionen in Grad "
+                        "(10° = 36 Positionen ≈ mind. 80%% Überlappung)")
+    f.add_argument("--photo-settle", type=float, default=cfg.camera.settle_s,
+                   help="Ausschwingzeit nach jedem Stopp in Sekunden")
+    f.add_argument("--usb-cam", action="append", default=None, metavar="DEVICE",
+                   help="V4L2-Pfad einer USB-Cam (mehrfach angebbar; "
+                        "Reihenfolge bestimmt cam_id usb0/usb1/…). "
+                        "Ohne Angabe: die 3 by-path-Standardgeräte")
     p.add_argument("--output-dir", default=cfg.output_dir,
                    help="Basisordner für Scan-Ordner")
     p.add_argument("--no-decode", action="store_true",
@@ -232,6 +280,16 @@ def build_parser() -> argparse.ArgumentParser:
                    help="Mock-LiDAR statt echter Hardware (Test ohne Gerät)")
     _add_hardware_args(p)
     p.set_defaults(func=cmd_scan)
+
+    # --- camera-test ---
+    p = sub.add_parser("camera-test",
+                       help="USB-Kameras testen: je ein Testbild + Lock-Werte",
+                       formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    p.add_argument("--out-dir", default="./camera_test",
+                   help="Zielordner für die Testbilder")
+    p.add_argument("--usb-cam", action="append", default=None, metavar="DEVICE",
+                   help="V4L2-Pfad (mehrfach); Default: die 3 by-path-Geräte")
+    p.set_defaults(func=cmd_camera_test)
 
     # --- selftest ---
     p = sub.add_parser("selftest", help="LiDAR-Kurztest (2 s)",

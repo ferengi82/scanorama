@@ -22,9 +22,9 @@
 
 ## v2 — Kameras
 
-- [ ] Fotorunde mit 3× IMX179 (Portierung `usb_camera_controller.py`)
-- [ ] Kamera-Metadaten (Mount-Geometrie, AE/AWB-Locks) in meta.json
-- [ ] Fotos im Scan-Ordner ablegen
+- [x] Fotorunde mit 3× IMX179 (Port aus v1; Default an, 10°-Schritte ≥80 % Überlappung)
+- [x] Kamera-Metadaten (Mount-Geometrie, AE/AWB-Locks, pose_recipe) in meta.json
+- [x] Fotos im Scan-Ordner (photos/), Azimut+Zeit pro Foto
 
 ## v3 — PC-Auswertung (separates Modul/Repo-Teil)
 
