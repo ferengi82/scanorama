@@ -64,6 +64,17 @@ class LockedParams:
 # V4L2-Controls, die wir je nach Treiber locken — alle optional.
 # Bei IMX179/Sonix sind exposure_absolute, gain und white_balance_temperature
 # vorhanden. Andere UVC-Treiber bieten teilweise nur eine Untermenge.
+# Kernel <5.9 / >=5.9 verwenden unterschiedliche Control-Namen —
+# wir probieren beide Varianten (erste, die klappt, gewinnt).
+_CTRL_ALIASES = {
+    "exposure_auto": ["exposure_auto", "auto_exposure"],
+    "exposure_absolute": ["exposure_absolute", "exposure_time_absolute"],
+    "white_balance_temperature_auto": ["white_balance_temperature_auto",
+                                       "white_balance_automatic"],
+    "white_balance_temperature": ["white_balance_temperature"],
+    "gain": ["gain"],
+}
+
 _LOCK_CONTROLS_AUTO_OFF = {
     "exposure_auto": 1,                # 1 = Manual Mode (V4L2-Spec)
     "white_balance_temperature_auto": 0,
@@ -151,23 +162,27 @@ class UsbCameraController:
         return out.stdout
 
     def _set_ctrl(self, name: str, value: int) -> bool:
-        """Setzt einen V4L2-Control. Loggt+returns False bei Fehler (Control fehlt)."""
-        try:
-            self._v4l2(f"--set-ctrl={name}={int(value)}")
-            return True
-        except subprocess.CalledProcessError as e:
-            log.debug(f"  {self.cam_id}: --set-ctrl={name}={value} fehlgeschlagen "
-                      f"(Control evtl. nicht vorhanden): {e.stderr.strip()}")
-            return False
+        """Setzt einen V4L2-Control (probiert alle Alias-Namen durch)."""
+        for alias in _CTRL_ALIASES.get(name, [name]):
+            try:
+                self._v4l2(f"--set-ctrl={alias}={int(value)}")
+                return True
+            except subprocess.CalledProcessError:
+                continue
+        log.debug(f"  {self.cam_id}: set {name}={value} fehlgeschlagen "
+                  f"(Control nicht vorhanden)")
+        return False
 
     def _get_ctrl(self, name: str) -> int | None:
-        """Liest aktuellen Wert eines Controls. None wenn nicht vorhanden."""
-        try:
-            out = self._v4l2(f"--get-ctrl={name}")
-            # Format: "exposure_absolute: 1234"
-            return int(out.strip().split(":")[1].strip())
-        except (subprocess.CalledProcessError, IndexError, ValueError):
-            return None
+        """Liest einen Control-Wert (probiert alle Alias-Namen). None wenn fehlt."""
+        for alias in _CTRL_ALIASES.get(name, [name]):
+            try:
+                out = self._v4l2(f"--get-ctrl={alias}")
+                # Format: "exposure_time_absolute: 1234"
+                return int(out.strip().split(":")[1].strip())
+            except (subprocess.CalledProcessError, IndexError, ValueError):
+                continue
+        return None
 
     def estimate_and_lock(self) -> LockedParams:
         """Misst AE/AWB im Auto-Modus und lockt sie für alle Folge-Aufnahmen.
