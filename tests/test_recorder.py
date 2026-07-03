@@ -19,6 +19,8 @@ def _base_config(tmp_path) -> Config:
     cfg = Config()
     cfg.motor.driver = "mock"
     cfg.lidar.startup_wait_s = 0.0
+    cfg.camera.enabled = False   # LiDAR-Tests ohne Fotorunde (auf dem
+                                 # Pi würden sonst echte Kameras auslösen!)
     cfg.output_dir = str(tmp_path)
     return cfg
 
