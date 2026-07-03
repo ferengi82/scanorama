@@ -29,7 +29,7 @@ part of the kernel — just plug it in).
 ## 3. Install scanorama
 
 ```bash
-git clone https://github.com/ferengi82/LiDar.git scanorama
+git clone https://github.com/ferengi82/scanorama.git
 cd scanorama
 # --system-site-packages: RPi.GPIO comes from the OS package
 python3 -m venv --system-site-packages venv

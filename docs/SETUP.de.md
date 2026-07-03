@@ -29,7 +29,7 @@ ist im Kernel enthalten — einfach einstecken).
 ## 3. scanorama installieren
 
 ```bash
-git clone https://github.com/ferengi82/LiDar.git scanorama
+git clone https://github.com/ferengi82/scanorama.git
 cd scanorama
 # --system-site-packages: RPi.GPIO kommt aus dem OS-Paket
 python3 -m venv --system-site-packages venv

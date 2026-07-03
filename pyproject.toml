@@ -24,7 +24,7 @@ dev = ["pytest>=7"]
 scanorama = "scanorama.cli:main"
 
 [project.urls]
-Repository = "https://github.com/ferengi82/LiDar"
+Repository = "https://github.com/ferengi82/scanorama"
 
 [tool.setuptools.packages.find]
 include = ["scanorama*"]

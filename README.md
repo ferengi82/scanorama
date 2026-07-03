@@ -16,7 +16,7 @@ scans).
 ## Quick start (on the Pi)
 
 ```bash
-git clone https://github.com/ferengi82/LiDar.git scanorama
+git clone https://github.com/ferengi82/scanorama.git
 cd scanorama
 python3 -m venv --system-site-packages venv   # RPi.GPIO comes from the OS
 ./venv/bin/pip install -e .
