@@ -84,6 +84,7 @@ Self-describing; the most important blocks:
   scan parameters).
 - `geometry` — geometry convention (see below) so the folder can be
   processed without external knowledge.
+- `calibration` — beam calibration of the device (see below).
 - `selftest`, `capture`, `decode` — statistics (frames, CRC rate,
   point count, rotor speed …).
 
@@ -92,7 +93,7 @@ Self-describing; the most important blocks:
 - LiDAR mounted **vertically**, scanning a vertical plane.
 - `elevation_deg`: 0° = straight **up** (Z+), 90° = horizontal forward,
   180° = down, 270° = horizontal backward.
-  (Fine calibration `el_offset` is the PC pipeline's job.)
+  (Fine correction: see the `calibration` block.)
 - `azimuth_deg`: rotation around the vertical axis (Z), positive in
   motor direction (this build: not inverted).
 - Cartesian (right-handed, X=right, Y=forward at az=0, Z=up, origin =
@@ -108,6 +109,38 @@ y = h · cos(azimuth)
 
 - 180° of azimuth suffices for a full sphere: each vertical 360° scan
   covers both sides per position.
+
+## Beam calibration (`calibration` block)
+
+The real laser beam deviates slightly from the ideal vertical plane —
+uncorrected, the two half-planes (front el≤180°, back el>180°) do not
+line up azimuthally (the "seam" of 180° scans: a few cm on oblique
+surfaces). Four angles (degrees) describe the deviation:
+
+| Field | Meaning |
+|---|---|
+| `el_offset_deg` | rotor zero: true elevation = el + offset |
+| `beam_skew_deg` | beam points sideways out of the rotor plane by a constant angle (ω0) |
+| `beam_wobble_deg` | elevation-dependent sideways component: ω(el) = ω0 + ω1·cos(el) |
+| `halfplane_split_deg` | azimuth split of the half-planes: el>180° rotated by +split/2, el≤180° by −split/2 around Z |
+
+Precise beam model (replaces the simple formula above; the block's
+`model` field documents it machine-readably):
+
+```
+el' = el + el_offset
+ω   = beam_skew + beam_wobble·cos(el)
+d   = cos ω·(cos el'·ẑ + sin el'·ŷ) + sin ω·x̂     (platform frame)
+d   rotated by ±halfplane_split/2 around ẑ (+ for el>180°)
+P   = r · R_z(azimuth) · d
+```
+
+Determination: `scanorama-studio-cli calibrate <360° scan>` (two-face
+analysis as with a theodolite — a full 360° scan measures every
+direction from both half-planes). Store on the Pi as
+`~/.config/scanorama/calibration.json` — the scanner then writes the
+values into every meta.json and the PC pipeline applies them
+automatically.
 
 ## photos/ + camera blocks in meta.json
 

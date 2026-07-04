@@ -108,14 +108,16 @@ GEOMETRY_CONVENTION = {
     "lidar_mount": "vertikal — der STL27L scannt eine Vertikalebene",
     "elevation_deg": "nativer LiDAR-Winkel; 0° = direkt nach oben (Z+), "
                      "90° = horizontal vorwärts, 180° = nach unten, "
-                     "270° = horizontal rückwärts. Ggf. el_offset am PC kalibrieren.",
+                     "270° = horizontal rückwärts. Feinkorrektur: "
+                     "calibration-Block.",
     "azimuth_deg": "Plattform-Drehung um die Stehachse (Z), relativ zur "
                    "Position beim Scan-Start (kein Homing). Positiv = "
                    "Drehrichtung des Motors bei invert_dir=false.",
     "to_cartesian": "r=dist/1000; z=r*cos(el); h=r*sin(el); "
                     "x=h*sin(az); y=h*cos(az)  (rechtshändig, X=rechts, "
                     "Y=vorne bei az=0, Z=oben; Ursprung = Schnittpunkt "
-                    "Drehachse/Scanebene)",
+                    "Drehachse/Scanebene). Präzise mit Strahlmodell aus "
+                    "dem calibration-Block rechnen!",
     "unfiltered": "Rohdaten sind UNGEFILTERT: Stativ-Bereich, Nahbereich "
                   "und Ausreißer sind enthalten — Filterung ist Sache der "
                   "PC-Auswertung.",
@@ -124,6 +126,10 @@ GEOMETRY_CONVENTION = {
 
 def build_meta(config_dict: dict, mode: str) -> dict:
     """Grundgerüst der meta.json zu Scan-Beginn (Zeitanker!)."""
+    from ..lidar import calibration
+
+    calib = calibration.load_calibration()
+    calib["model"] = calibration.MODEL_RECIPE
     return {
         "schema_version": 1,
         "software": {
@@ -142,6 +148,7 @@ def build_meta(config_dict: dict, mode: str) -> dict:
         "mode": mode,
         "config": config_dict,
         "geometry": GEOMETRY_CONVENTION,
+        "calibration": calib,
         "files": {
             "lidar_raw": "lidar_raw.bin",
             "lidar_index": "lidar_index.npz",

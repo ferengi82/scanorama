@@ -1,5 +1,22 @@
 # Arbeitsstand
 
+## 2026-07-04 — Strahlkalibrierung (Naht-Fehler gelöst)
+
+- **Befund**: Die Naht-Differenz bei 180°-Scans (einige cm) kommt NICHT
+  von Motor/Mechanik (Foto-Beweis: 360°-Drehung auf 0,02° exakt,
+  3× reproduzierbar) und nicht von Exzentrizität (<0,5 mm!), sondern
+  vom **Strahl selbst**: Der STL27L-Strahl liegt nicht exakt in der
+  Rotorebene (Skew ~0,4° + Wobble ~0,9° + Halbebenen-Versatz ~−1,4°).
+- Diagnose per Zwei-Lagen-Analyse (3× 360°-Scan): jede Richtung wird
+  von vorderer UND hinterer Halbebene gemessen, Differenzfeld verrät
+  die Fehlerform. Naht: 38,8 mm → **2,9 mm** nach Kalibrierung.
+- Neu: `scanorama/lidar/calibration.py` (Loader wie cameras.json),
+  meta.json-Block `calibration` (+ `model`-Formel), Doku DATAFORMAT
+- Werte auf dem Pi installiert: `~/.config/scanorama/calibration.json`
+  (gefittet aus 2026-07-04_scan_01_002)
+- Studio: volles Strahlmodell in `transform.py`, Auto-Anwendung aus
+  meta.json, `scanorama-studio-cli calibrate <360°-Scan>`, Panel-Felder
+
 ## 2026-07-03 — v2: Kamera-Integration (Fotorunde + Mounts in meta.json)
 
 - Neues Paket `scanorama/camera/` (Controller-Port aus v1, Mounts mit
