@@ -111,8 +111,10 @@ GEOMETRY_CONVENTION = {
                      "270° = horizontal rückwärts. Feinkorrektur: "
                      "calibration-Block.",
     "azimuth_deg": "Plattform-Drehung um die Stehachse (Z), relativ zur "
-                   "Position beim Scan-Start (kein Homing). Positiv = "
-                   "Drehrichtung des Motors bei invert_dir=false.",
+                   "Position beim Scan-Start (kein Homing). Mit "
+                   "invert_dir=true (Default seit 2026-07-04) ist das "
+                   "Koordinatensystem realitätstreu (rechtshändig); Scans "
+                   "mit invert_dir=false sind spiegelverkehrt.",
     "to_cartesian": "r=dist/1000; z=r*cos(el); h=r*sin(el); "
                     "x=h*sin(az); y=h*cos(az)  (rechtshändig, X=rechts, "
                     "Y=vorne bei az=0, Z=oben; Ursprung = Schnittpunkt "

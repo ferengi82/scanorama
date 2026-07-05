@@ -31,7 +31,11 @@ class MotorConfig:
     steps_per_rev: int = 200         # NEMA17 Fullsteps
     microsteps: int = 64             # TMC2209 per UART; STSPIN220 fest 1/16
     gear_ratio: float = 3.0          # Riemen 60T/20T
-    invert_dir: bool = False         # aktueller Aufbau: nicht invertiert
+    # invert_dir=True seit 2026-07-04: Die Metashape-Kalibrierung der
+    # Kameras hat bewiesen, dass die Wolken mit der alten Drehrichtung
+    # SPIEGELVERKEHRT zur Realität waren (in der Wolke allein unsichtbar).
+    # Mit invertierter Richtung ist das Koordinatensystem realitätstreu.
+    invert_dir: bool = True
     # Nur TMC2209 (UART):
     uart_port: str = "/dev/ttyAMA0"
     motor_current_ma: int = 800

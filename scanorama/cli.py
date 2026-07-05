@@ -52,8 +52,12 @@ def _add_hardware_args(p: argparse.ArgumentParser, motor: bool = True) -> None:
         g.add_argument("--microsteps", type=int, default=cfg.motor.microsteps,
                        choices=[1, 2, 4, 8, 16, 32, 64, 128, 256],
                        help="Microstepping (nur TMC2209; STSPIN220 fest 1/16)")
-        g.add_argument("--invert-dir", action="store_true",
-                       help="Drehrichtung invertieren (Default: nicht invertiert)")
+        g.add_argument("--invert-dir", action=argparse.BooleanOptionalAction,
+                       default=cfg.motor.invert_dir,
+                       help="Drehrichtung invertieren (Default: invertiert — "
+                            "so ist das Koordinatensystem realitätstreu; "
+                            "--no-invert-dir für die alte, gespiegelte "
+                            "Konvention)")
         g.add_argument("--spreadcycle", action="store_true",
                        help="SpreadCycle statt StealthChop (mehr Drehmoment, lauter)")
         g.add_argument("--uart-port", default=cfg.motor.uart_port,

@@ -60,8 +60,10 @@ steps_per_deg = (200 Fullsteps × Microsteps × 3.0 Gear) / 360
 ```
 
 TMC2209 @ 1/64: 106.67 Steps/° · STSPIN220 @ 1/16: 26.67 Steps/°.
-Drehrichtung ist im aktuellen Aufbau **nicht invertiert**
-(`--invert-dir` falls der Scan gespiegelt erscheint).
+Drehrichtung ist **invertiert** (Default seit 2026-07-04) — die
+Metashape-Kamerakalibrierung hat gezeigt, dass Scans mit der alten
+Richtung spiegelverkehrt zur Realität waren. `--no-invert-dir` stellt
+die alte Konvention wieder her.
 
 ## STL27L-Protokoll
 
@@ -98,7 +100,8 @@ Winkel der 12 Punkte: lineare Interpolation Start→End (Wraparound bei
 2. **LiDAR braucht ~3 s Hochlauf** vor den ersten gültigen Daten.
 3. **STSPIN220 max 10 V** Motorspannung.
 4. User `pi` muss in der Gruppe `dialout` sein (`/dev/ttyUSB0`, `/dev/ttyAMA0`).
-5. Drehrichtung nicht invertiert; gespiegelter Scan → `--invert-dir`.
+5. Drehrichtung invertiert (realitätstreu); Alt-Scans mit
+   invert_dir=false sind spiegelverkehrt.
 
 ## Kameras (Fotorunde)
 

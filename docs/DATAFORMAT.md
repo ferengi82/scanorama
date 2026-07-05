@@ -95,7 +95,9 @@ Self-describing; the most important blocks:
   180° = down, 270° = horizontal backward.
   (Fine correction: see the `calibration` block.)
 - `azimuth_deg`: rotation around the vertical axis (Z), positive in
-  motor direction (this build: not inverted).
+  motor direction. With `invert_dir=true` (default since 2026-07-04)
+  the frame is true to reality; older scans (invert_dir=false in
+  meta.json) are mirrored.
 - Cartesian (right-handed, X=right, Y=forward at az=0, Z=up, origin =
   intersection of rotation axis and scan plane):
 
