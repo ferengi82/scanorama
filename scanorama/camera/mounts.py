@@ -33,15 +33,22 @@ log = logging.getLogger(__name__)
 
 CONFIG_PATH = Path.home() / ".config" / "scanorama" / "cameras.json"
 
-# Kalibrierte Einbaulagen aus v1 (export_metashape.py BUILTIN_PROFILES).
-# Mapping: usb0 = oben (pitch +50°), usb1 = mitte (+15°), usb2 = unten (−20°).
+# Kalibrierte Einbaulagen, Stand 2026-07-05 (Metashape-Relativgeometrie
+# aus 108 ausgerichteten Fotos + Azimut-Fit gegen die LiDAR-Wolke,
+# gilt für invert_dir=true). Die Module sind HOCHKANT verbaut
+# (roll ≈ ±90°). Mapping: usb0 = oben (+48,8°), usb1 = Seite (+13,7°),
+# usb2 = unten (−18,7°). r/z aus der Kugelgeometrie (Ø 100 mm,
+# Mittelpunkt 50 mm unter Scannerzentrum).
 CALIBRATED_MOUNTS: dict[str, dict] = {
-    "usb0": {"r_cam_m": 0.03214, "z_cam_m": -0.01170, "az_offset_deg": 270.0,
-             "yaw_mount_deg": 0.0, "pitch_mount_deg": 50.0, "roll_mount_deg": 0.0},
-    "usb1": {"r_cam_m": 0.04830, "z_cam_m": -0.03706, "az_offset_deg": 35.0,
-             "yaw_mount_deg": 0.0, "pitch_mount_deg": 15.0, "roll_mount_deg": 0.0},
-    "usb2": {"r_cam_m": 0.04698, "z_cam_m": -0.06710, "az_offset_deg": 145.0,
-             "yaw_mount_deg": 0.0, "pitch_mount_deg": -20.0, "roll_mount_deg": 0.0},
+    "usb0": {"r_cam_m": 0.03294, "z_cam_m": -0.01239, "az_offset_deg": 9.8,
+             "yaw_mount_deg": 0.0, "pitch_mount_deg": 48.79,
+             "roll_mount_deg": 89.72},
+    "usb1": {"r_cam_m": 0.04857, "z_cam_m": -0.03814, "az_offset_deg": 241.0,
+             "yaw_mount_deg": 0.0, "pitch_mount_deg": 13.72,
+             "roll_mount_deg": 90.48},
+    "usb2": {"r_cam_m": 0.04736, "z_cam_m": -0.06604, "az_offset_deg": 134.1,
+             "yaw_mount_deg": 0.0, "pitch_mount_deg": -18.71,
+             "roll_mount_deg": -88.56},
 }
 
 

@@ -40,9 +40,9 @@ def test_scan_with_photo_round(tmp_path):
     # Mounts: kalibrierte v1-Werte pro Kamera + Gerätepfad
     mounts = meta["cameras"]["mounts"]
     assert set(mounts) == {"usb0", "usb1", "usb2"}
-    assert mounts["usb0"]["pitch_mount_deg"] == 50.0
-    assert mounts["usb0"]["az_offset_deg"] == 270.0
-    assert mounts["usb2"]["z_cam_m"] == pytest.approx(-0.0671)
+    assert mounts["usb0"]["pitch_mount_deg"] == 48.79
+    assert mounts["usb0"]["az_offset_deg"] == 9.8
+    assert mounts["usb2"]["z_cam_m"] == pytest.approx(-0.06604)
     assert "device" in mounts["usb0"]
 
     # 8 Positionen (360/45) × 3 Cams = 24 Fotos, Dateien existieren
@@ -93,7 +93,7 @@ def test_camera_failure_keeps_scan(tmp_path, monkeypatch):
 
 def test_load_mounts_defaults_and_override(tmp_path):
     mounts = load_mounts(tmp_path / "gibtsnicht.json")
-    assert mounts["usb1"].az_offset_deg == 35.0
+    assert mounts["usb1"].az_offset_deg == 241.0
 
     override = tmp_path / "cameras.json"
     override.write_text(json.dumps({
@@ -103,5 +103,5 @@ def test_load_mounts_defaults_and_override(tmp_path):
     }))
     mounts = load_mounts(override)
     assert mounts["usb1"].az_offset_deg == 40.0      # überschrieben
-    assert mounts["usb0"].az_offset_deg == 270.0     # Default bleibt
+    assert mounts["usb0"].az_offset_deg == 9.8       # Default bleibt
     assert set(CALIBRATED_MOUNTS) <= set(mounts)

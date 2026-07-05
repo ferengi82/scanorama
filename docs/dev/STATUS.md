@@ -1,5 +1,25 @@
 # Arbeitsstand
 
+## 2026-07-05 — invert_dir + Kamera-Mounts neu kalibriert
+
+- **Spiegel-Entdeckung**: Scans mit invert_dir=false waren
+  spiegelverkehrt zur Realität (Beweis: realitätstreue Fotos lassen
+  sich nur auf eine realitätstreue Wolke konsistent projizieren —
+  Einfärbung klappt erst mit invertierter Richtung sauber).
+  invert_dir=true ist jetzt Default; Strahlkalibrierung spiegelt
+  sich mit (skew/wobble/split-Vorzeichen), auf dem Pi aktualisiert,
+  Naht am 360°-Scan verifiziert (31,8 → 3,7 mm).
+- **Kamera-Mounts neu bestimmt** (Metashape-Relativgeometrie aus 108
+  ausgerichteten Fotos + Azimut-Fit gegen die Wolke): Module sind
+  HOCHKANT verbaut (roll ≈ ±90°!), usb0=oben +48,8°, usb1=Seite
+  +13,7°, usb2=unten −18,7°; az_offsets 9,8°/241,0°/134,1°.
+  CALIBRATED_MOUNTS + cameras.json auf dem Pi aktualisiert.
+  Gemessene Intrinsics: f=2548,9 px, cx −19,1, cy +100,3
+  (Metashape-Selbstkalibrierung; im Studio hinterlegt).
+- Verifikation: Produkt-Einfärbung (Studio colorize) auf
+  2026-07-05_scan_01_001 → 77,7 % Punkte, Panorama sauber und
+  einfach belegt (kein Ghosting).
+
 ## 2026-07-04 — Strahlkalibrierung (Naht-Fehler gelöst)
 
 - **Befund**: Die Naht-Differenz bei 180°-Scans (einige cm) kommt NICHT
