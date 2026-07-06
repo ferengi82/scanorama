@@ -95,9 +95,9 @@ Selbsterklärend; wichtigste Blöcke:
 - `elevation_deg`: 0° = direkt nach **oben** (Z+), 90° = horizontal
   vorwärts, 180° = unten, 270° = horizontal rückwärts.
   (Feinkorrektur: siehe `calibration`-Block.)
-- `azimuth_deg`: Drehung um die Stehachse (Z). Mit `invert_dir=true`
-  (Default seit 2026-07-04) ist das System realitätstreu; ältere Scans
-  (invert_dir=false in der meta.json) sind spiegelverkehrt.
+- `azimuth_deg`: Drehung um die Stehachse (Z), positiv in Motor-Dreh-
+  richtung. Mit `invert_dir=false` (Default) ist das System realitätstreu;
+  Scans mit `invert_dir=true` (Aufbau 2026-07-04..07-06) sind spiegelverkehrt.
 - Kartesisch (rechtshändig, X=rechts, Y=vorne bei az=0, Z=oben,
   Ursprung = Schnittpunkt Drehachse/Scanebene):
 

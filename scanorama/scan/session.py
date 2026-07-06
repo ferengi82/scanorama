@@ -112,9 +112,9 @@ GEOMETRY_CONVENTION = {
                      "calibration-Block.",
     "azimuth_deg": "Plattform-Drehung um die Stehachse (Z), relativ zur "
                    "Position beim Scan-Start (kein Homing). Mit "
-                   "invert_dir=true (Default seit 2026-07-04) ist das "
-                   "Koordinatensystem realitätstreu (rechtshändig); Scans "
-                   "mit invert_dir=false sind spiegelverkehrt.",
+                   "invert_dir=false (Default) ist das Koordinatensystem "
+                   "realitätstreu (rechtshändig); Scans mit invert_dir=true "
+                   "(Aufbau 2026-07-04..07-06) sind spiegelverkehrt.",
     "to_cartesian": "r=dist/1000; z=r*cos(el); h=r*sin(el); "
                     "x=h*sin(az); y=h*cos(az)  (rechtshändig, X=rechts, "
                     "Y=vorne bei az=0, Z=oben; Ursprung = Schnittpunkt "

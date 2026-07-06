@@ -60,10 +60,10 @@ steps_per_deg = (200 full steps × microsteps × 3.0 gear) / 360
 ```
 
 TMC2209 @ 1/64: 106.67 steps/° · STSPIN220 @ 1/16: 26.67 steps/°.
-Rotation direction is **inverted** (default since 2026-07-04) — the
-Metashape camera calibration proved that scans with the old direction
-were mirror images of reality. `--no-invert-dir` restores the old
-convention.
+Rotation direction is **not inverted** (default) — this makes the
+coordinate frame true to reality. `--invert-dir` produces the old,
+mirrored convention (build 2026-07-04..07-06; the Metashape "proof"
+back then did not hold — mirror+mirror is self-consistent).
 
 ## STL27L protocol
 
@@ -100,8 +100,9 @@ Angles of the 12 points: linear interpolation start→end (wraparound at
 2. **The LiDAR needs ~3 s spin-up** before the first valid data.
 3. **STSPIN220 max 10 V** motor voltage.
 4. User `pi` must be in the `dialout` group (`/dev/ttyUSB0`, `/dev/ttyAMA0`).
-5. Direction inverted (true to reality); old scans with
-   invert_dir=false are mirrored.
+5. Direction not inverted (true to reality); mirrored scan →
+   `--invert-dir`. Old scans with invert_dir=true (2026-07-04..07-06)
+   are mirrored.
 
 ## Cameras (photo round)
 

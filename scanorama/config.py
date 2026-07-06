@@ -31,11 +31,15 @@ class MotorConfig:
     steps_per_rev: int = 200         # NEMA17 Fullsteps
     microsteps: int = 64             # TMC2209 per UART; STSPIN220 fest 1/16
     gear_ratio: float = 3.0          # Riemen 60T/20T
-    # invert_dir=True seit 2026-07-04: Die Metashape-Kalibrierung der
-    # Kameras hat bewiesen, dass die Wolken mit der alten Drehrichtung
-    # SPIEGELVERKEHRT zur Realität waren (in der Wolke allein unsichtbar).
-    # Mit invertierter Richtung ist das Koordinatensystem realitätstreu.
-    invert_dir: bool = True
+    # invert_dir=False (Default): Motor-Drehrichtung deckt sich mit der
+    # Azimut-Konvention der Auswertung (x=h*sin(az)) → Koordinatensystem
+    # realitätstreu. Der 2026-07-04/05-Ausflug auf True war ein Irrtum:
+    # Metashape kann Händigkeit NICHT belegen (eine gespiegelte Wolke ist
+    # gegen die Fotos genauso konsistent — Spiegel+Spiegel). Der physische
+    # Raum-Check am 2026-07-06 (Bett auf der falschen Seite) hat gezeigt,
+    # dass True die Wolke spiegelt. Scans von 2026-07-04..07-06 (invert_dir=
+    # true in der meta.json) sind spiegelverkehrte Alt-Scans.
+    invert_dir: bool = False
     # Nur TMC2209 (UART):
     uart_port: str = "/dev/ttyAMA0"
     motor_current_ma: int = 800
