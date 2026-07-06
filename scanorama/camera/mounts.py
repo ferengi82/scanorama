@@ -33,26 +33,25 @@ log = logging.getLogger(__name__)
 
 CONFIG_PATH = Path.home() / ".config" / "scanorama" / "cameras.json"
 
-# Kalibrierte Einbaulagen, Stand 2026-07-05 (Metashape-Relativgeometrie
-# aus 108 ausgerichteten Fotos + Azimut-Fit gegen die LiDAR-Wolke).
-# ACHTUNG: gefittet gegen die damals gespiegelte invert_dir=true-Wolke.
-# Seit invert_dir=false (Default, 2026-07-06) liegt die Wolke im anderen
-# Frame — az_offset_deg/roll passen dann nicht mehr und müssen per
-# Foto-Overlay Auto-Fit neu bestimmt werden (Werte hier NICHT blind
-# umrechnen). Die Module sind HOCHKANT verbaut (roll ≈ ±90°).
-# Mapping: usb0 = oben (+48,8°), usb1 = Seite (+13,7°),
-# usb2 = unten (−18,7°). r/z aus der Kugelgeometrie (Ø 100 mm,
-# Mittelpunkt 50 mm unter Scannerzentrum).
+# Einbaulagen für den invert_dir=false-Frame (Stand 2026-07-06). az_offset/
+# pitch/roll aus Metashape-Alignment + Foto-Overlay Auto-Fit gegen die
+# realitätstreue Wolke (scan_03_001); r/z aus der Kugelgeometrie (Ø 100 mm,
+# Mittelpunkt 50 mm unter Scannerzentrum). Die Module sind HOCHKANT verbaut
+# (roll ≈ ±90°). Mapping: usb0 = oben (+48,5°), usb1 = Seite (+16°),
+# usb2 = unten (−16°).
+# OFFEN (2026-07-06, weiter zu optimieren): usb1-pitch — Auto-Fit bevorzugt
+# ~27° statt 16°; usb2 — Auto-Fit konnte den Down-Blick nicht validieren
+# (wenig Wolke im Bild); usb0 nur mittlere Konfidenz.
 CALIBRATED_MOUNTS: dict[str, dict] = {
-    "usb0": {"r_cam_m": 0.03294, "z_cam_m": -0.01239, "az_offset_deg": 9.8,
-             "yaw_mount_deg": 0.0, "pitch_mount_deg": 48.79,
-             "roll_mount_deg": 89.72},
-    "usb1": {"r_cam_m": 0.04857, "z_cam_m": -0.03814, "az_offset_deg": 241.0,
-             "yaw_mount_deg": 0.0, "pitch_mount_deg": 13.72,
-             "roll_mount_deg": 90.48},
-    "usb2": {"r_cam_m": 0.04736, "z_cam_m": -0.06604, "az_offset_deg": 134.1,
-             "yaw_mount_deg": 0.0, "pitch_mount_deg": -18.71,
-             "roll_mount_deg": -88.56},
+    "usb0": {"r_cam_m": 0.03294, "z_cam_m": -0.01239, "az_offset_deg": 19.8,
+             "yaw_mount_deg": 0.0, "pitch_mount_deg": 48.54,
+             "roll_mount_deg": 93.72},
+    "usb1": {"r_cam_m": 0.04857, "z_cam_m": -0.03814, "az_offset_deg": 212.0,
+             "yaw_mount_deg": 0.0, "pitch_mount_deg": 16.0,
+             "roll_mount_deg": 89.0},
+    "usb2": {"r_cam_m": 0.04736, "z_cam_m": -0.06604, "az_offset_deg": 324.0,
+             "yaw_mount_deg": 0.0, "pitch_mount_deg": -16.0,
+             "roll_mount_deg": -88.0},
 }
 
 
